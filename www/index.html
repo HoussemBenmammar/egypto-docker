@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Découvertes en Égypte</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      function fetchData(table) {
+        fetch(`http://localhost:8081/api.php?table=${table}`)
+          .then((response) => response.json())
+          .then((data) => {
+            let output = `<h2>Données de ${table}</h2>`;
+            output += '<div class="table-container">';
+
+            if (table === "decouvrir") {
+              output +=
+                "<table><tr><th>NroSite</th><th>NroDynastie</th><th>NroOrdre</th><th>Découverte</th></tr>";
+              data.forEach((item) => {
+                output += `<tr>
+                                          <td>${item.NroSite}</td>
+                                          <td>${item.NroDynastie}</td>
+                                          <td>${item.NroOrdre}</td>
+                                          <td>${item.Decouverte}</td>
+                                       </tr>`;
+              });
+            } else if (table === "dieu") {
+              output +=
+                "<table><tr><th>Nom</th><th>Forme</th><th>Représentation</th><th>Fonction</th></tr>";
+              data.forEach((item) => {
+                output += `<tr>
+                                          <td>${item.NomDieu}</td>
+                                          <td>${item.Forme}</td>
+                                          <td>${item.Représentation}</td>
+                                          <td>${item.Fonction}</td>
+                                       </tr>`;
+              });
+            }
+
+            output += "</table></div>";
+            document.getElementById("result").innerHTML = output;
+          })
+          .catch((error) => console.error("Erreur:", error));
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Exploration Archéologique</h1>
+      <button onclick="fetchData('decouvrir')">Charger Découvertes</button>
+      <button onclick="fetchData('dieu')">Charger Dieux</button>
+      <div id="result"></div>
+    </div>
+  </body>
+</html>
